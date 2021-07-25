@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -96,13 +95,79 @@ func (l *LinkedList) get(index int) *Node {
 	return nil
 }
 
-func main() {
-	ll := makeList()
-	ll.append(2)
-	ll.append(12)
-	ll.append(33)
-	ll.append(45)
-	ll.prepend(100)
+func (l *LinkedList) dropHead() bool {
+	if l.head == nil {
+		return false
+	}
+	l.head = l.head.next
+	l.size--
+	return true
+}
+func (l *LinkedList) dropTail() bool {
+	if l.head == nil {
+		return false
+	}
+	if l.head == l.tail {
+		l.head = nil
+		l.tail = nil
+		l.size--
+		return true
+	}
 
-	fmt.Println(ll.print())
+	var prev *Node = nil
+	current := l.head
+	for current.next != nil {
+		prev = current
+		current = current.next
+	}
+
+	prev.next = nil
+	l.tail = prev
+	l.size--
+	return true
+}
+
+func (l *LinkedList) deleteAt(index int) bool {
+	if index < 0 || index > l.getSize() {
+		return false
+	}
+	if index == l.getSize()-1 {
+		return l.dropTail()
+	}
+	if index == 0 {
+		return l.dropHead()
+	}
+
+	prev := l.get(index - 1)
+	nodeToRemove := prev.next
+	prev.next = nodeToRemove.next
+	l.size--
+
+	return true
+}
+
+func (l *LinkedList) set(data, index int) bool {
+	node := l.get(index)
+	if node != nil {
+		node.data = data
+		return true
+	}
+	return false
+}
+
+func (l *LinkedList) reverse() *LinkedList {
+	var node *Node = l.head
+	l.head = l.tail
+	l.tail = node
+
+	var next *Node = nil
+	var prev *Node = nil
+
+	for i := 0; i < l.getSize(); i++ {
+		next = node.next
+		node.next = prev
+		prev = node
+		node = next
+	}
+	return l
 }
