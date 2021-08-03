@@ -1,132 +1,92 @@
 class Node<T> {
   data: T
   next: Node<T> | null
+  prev: Node<T> | null
+
   constructor(data: T) {
     this.data = data
     this.next = null
+    this.prev = null
   }
 }
 
-class LinkedList<T> {
-  private head: Node<T> | null
-  private tail: Node<T> | null
-  private size: number
-
+class List<T> {
+  head: Node<T> | null
+  tail: Node<T> | null
+  size: number
   constructor() {
     this.head = null
     this.tail = null
     this.size = 0
   }
-
-  private makeNewNode(data: T) {
-    return new Node<T>(data)
-  }
-
   append(data: T) {
-    const newNode = this.makeNewNode(data)
-    if (!this.head) {
+    const newNode = new Node(data)
+    if (this.size === 0) {
       this.head = newNode
       this.tail = newNode
       this.size++
-      return newNode
+      return this
     }
-
     this.tail!.next = newNode
+    newNode.prev = this.tail
     this.tail = newNode
     this.size++
-
-    return newNode
+    return this
   }
   prepend(data: T) {
-    const newNode = this.makeNewNode(data)
-    if (!this.head) {
+    var newNode = new Node(data)
+    if (this.size === 0) {
       this.head = newNode
       this.tail = newNode
       this.size++
-      return newNode
+      return this
     }
+    this.head!.prev = newNode
     newNode.next = this.head
     this.head = newNode
     this.size++
-    return newNode
+    return this
   }
-  get length() {
+  pop() {
+    if (!this.tail) {
+      return null
+    }
+    if (this.size === 1) {
+      this.head = null
+      this.tail = null
+      this.size--
+      return this
+    }
+    const poppedNode = this.tail
+    this.tail = poppedNode.prev
+    this.tail!.next = null
+    poppedNode.prev = null
+    this.size--
+    return this
+  }
+  shift(data: T) {}
+  get(index: number) {}
+  deleteAt(index: number) {}
+  get getSize() {
     return this.size
   }
-  print() {
+
+  print(): string {
     const xs: T[] = []
     let current = this.head
-    while (current) {
+
+    while (current !== null) {
       xs.push(current.data)
       current = current.next
     }
     return xs.join(" -> ")
   }
-
-  getNode(index: number) {
-    if (index === 0) {
-      return this.head
-    }
-    if (index > this.size) {
-      return null
-    }
-    let counter = 0
-    let current = this.head
-    while (current) {
-      if (counter === index) {
-        return current
-      }
-      counter++
-      current = current.next
-    }
-    return null
-  }
-
-  removeHead() {
-    if (this.head === null) {
-      return null
-    }
-    // A -> B -> C
-    // let B be the new head
-    // so we drop A
-    this.head = this.head.next
-    this.size--
-  }
-  pop() {
-    if (!this.head) return null
-    let current = this.head
-    let newTail = current
-    while (current.next !== null) {
-      newTail = current
-      current = current.next
-    }
-    newTail.next = null
-    this.tail = newTail
-    this.size--
-    return current
-  }
-
-  // delete(index: number) {
-  //   if (index === 0) {
-  //     return this.removeHead()
-  //   }
-  //   if (index > this.size) {
-  //     return null
-  //   }
-  //   let counter = 0
-  //   let current = this.head
-  // }
 }
 
-const l = new LinkedList()
-l.append("apple")
-l.append("banana")
-l.append("orange")
-l.append("kiwi")
-l.prepend("Jack fruit")
-l.prepend("Kiwi")
-l.pop()
-l.pop()
-console.log(l.print())
-console.log(l.length)
-// console.log(l.getNode(0))
+const list = new List()
+list.prepend("L")
+list.append("V")
+list.append("R")
+list.append("M")
+list.pop()
+console.log(list.print())
