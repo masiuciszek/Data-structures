@@ -1,92 +1,21 @@
-class Node<T> {
-  data: T
-  next: Node<T> | null
-  prev: Node<T> | null
-
-  constructor(data: T) {
-    this.data = data
-    this.next = null
-    this.prev = null
+const handler = (n: number) => (fn: (n: number) => number) => {
+  const cache: Record<string, number> = {}
+  if (cache[n]) {
+    const value = cache[n]
+    return value
+  } else {
+    cache[n] = fn(n)
+    return fn(n)
   }
 }
 
-class List<T> {
-  head: Node<T> | null
-  tail: Node<T> | null
-  size: number
-  constructor() {
-    this.head = null
-    this.tail = null
-    this.size = 0
-  }
-  append(data: T) {
-    const newNode = new Node(data)
-    if (this.size === 0) {
-      this.head = newNode
-      this.tail = newNode
-      this.size++
-      return this
-    }
-    this.tail!.next = newNode
-    newNode.prev = this.tail
-    this.tail = newNode
-    this.size++
-    return this
-  }
-  prepend(data: T) {
-    var newNode = new Node(data)
-    if (this.size === 0) {
-      this.head = newNode
-      this.tail = newNode
-      this.size++
-      return this
-    }
-    this.head!.prev = newNode
-    newNode.next = this.head
-    this.head = newNode
-    this.size++
-    return this
-  }
-  pop() {
-    if (!this.tail) {
-      return null
-    }
-    if (this.size === 1) {
-      this.head = null
-      this.tail = null
-      this.size--
-      return this
-    }
-    const poppedNode = this.tail
-    this.tail = poppedNode.prev
-    this.tail!.next = null
-    poppedNode.prev = null
-    this.size--
-    return this
-  }
-  shift(data: T) {}
-  get(index: number) {}
-  deleteAt(index: number) {}
-  get getSize() {
-    return this.size
-  }
+const x = handler(42)
+const fib = (n: number): number => (n <= 1 ? n : fib(n - 2) + fib(n - 1))
 
-  print(): string {
-    const xs: T[] = []
-    let current = this.head
+// console.time("foo")
+// fib(42)
+// console.timeEnd("foo")
 
-    while (current !== null) {
-      xs.push(current.data)
-      current = current.next
-    }
-    return xs.join(" -> ")
-  }
-}
-
-const list = new List()
-list.prepend("L")
-list.append("V")
-list.append("R")
-list.append("M")
-list.pop()
-console.log(list.print())
+console.time("apa")
+x(fib)
+console.timeEnd("apa")
