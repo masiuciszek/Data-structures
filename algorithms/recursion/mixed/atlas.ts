@@ -1,9 +1,9 @@
-interface Item {
+interface ItemType {
   id: number
   parentId: number | null
   name: string
 }
-const atlas: Array<Item> = [
+const atlas: Array<ItemType> = [
   {
     id: 1,
     parentId: null,
@@ -121,36 +121,15 @@ const atlas: Array<Item> = [
   },
 ]
 
-// interface Category {
-//   id: number
-//   name: string
-//   parentId: number | null
-// }
-// const categories: Array<Category> = [
-//   {id: 1, name: "animal", parentId: null},
-//   {id: 2, name: "shape", parentId: null},
-//   {id: 3, name: "cats", parentId: 1},
-//   {id: 4, name: "dogs", parentId: 1},
-//   {id: 5, name: "circle", parentId: 2},
-//   {id: 6, name: "square", parentId: 2},
-// ]
-
-// interface MakeTreeOfItems extends Item {
-//   children: Array<Item>
-// }
-
-interface ItemWithChildren extends Item {
-  children: Array<Item>
-}
-type AtlasReturnType = ItemWithChildren[]
-
-const makeTree = (categories: Array<Item>, parentId = null): any => {
-  return (
-    categories
-      .filter(item => item.parentId === parentId)
-      // @ts-ignore
-      .reduce((list, node) => [...list, {...node, children: makeTree(categories, node.id)}], [])
-  )
-}
+const makeTree = <T extends ItemType>(categories: Array<T>, parentId = null): T[] =>
+  categories
+    .filter(item => item.parentId === parentId)
+    .reduce(
+      (list: Array<any>, node: any) => [
+        ...list,
+        {...node, children: makeTree(categories, node.id)},
+      ],
+      []
+    )
 
 const atlasTree = makeTree(atlas)

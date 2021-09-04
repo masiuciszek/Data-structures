@@ -8,6 +8,7 @@ const tree: Item = {
       name: "Timmy",
       children: [
         {name: "Carl", children: []},
+        {name: "Logan", children: [{name: "Alan", children: []}]},
         {name: "Stina", children: [{name: "Masiu", children: [{name: "Filip", children: []}]}]},
       ],
     },
@@ -25,4 +26,13 @@ const print = (t: typeof tree, level = 0) => {
   })
 }
 
-console.log(print(tree))
+const getChildrenNodes = (t: typeof tree[], result: Array<string>) => {
+  for (const node of t) {
+    if (!node.children || node.children.length === 0) {
+      result.push(node.name)
+    } else {
+      getChildrenNodes(node.children, result)
+    }
+  }
+  return result
+}
