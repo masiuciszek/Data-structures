@@ -40,6 +40,20 @@ class BstTree {
     }
   }
 
+  bfsVersion2() {
+    if (this.root === null) return
+    let node = this.root
+    const queue: Node[] = [node]
+    const visited: Array<number> = []
+    while (queue.length > 0) {
+      node = queue.shift() as Node
+      visited.push(node.value)
+      if (node.left) queue.push(node.left)
+      if (node.right) queue.push(node.right)
+    }
+    return visited
+  }
+
   breadthFirstTraversal(root: BstN, visitFn: (value: number) => void) {
     if (root === null) return
     const queue = [root]

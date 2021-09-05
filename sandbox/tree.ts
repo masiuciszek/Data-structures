@@ -32,16 +32,67 @@ class Bst {
   }
 
   search(key: number) {
-    this.searchRec(this.root, key)
+    let current = this.root
+    let found = false
+    while (current && !found) {
+      if (key === current.value) {
+        found = true
+        return current
+      }
+      if (key < current.value) {
+        current = current.left
+      } else {
+        current = current.right
+      }
+    }
+    return current
   }
-  searchRec(node: Node | null, value: number): Node | null {
-    if (node === null || node.value === value) {
-      return node
+  bfs() {
+    if (this.root === null) {
+      return
     }
-    if (node.value < value) {
-      return this.searchRec(node.left, value)
+    let node = this.root
+    const queue: Array<Node> = [node]
+    const visited: Set<number> = new Set()
+    while (queue.length > 0) {
+      node = queue.shift() as Node
+      visited.add(node.value)
+      if (node.left) queue.push(node.left)
+      if (node.right) queue.push(node.right)
     }
-    return this.searchRec(node.right, value)
+    return visited
+  }
+
+  dfsPreOrder() {
+    const visited: Array<string> = []
+    const traverse = (node: Node, level = 0) => {
+      visited.push(`\n${" ".repeat(level * 2)}${node.value}`)
+      if (node.left) traverse(node.left, level + 1)
+      if (node.right) traverse(node.right, level + 1)
+    }
+    traverse(this.root as Node)
+    return visited.join("\n")
+  }
+
+  dfsPostOrder() {
+    const visited: Array<string> = []
+    const traverse = (node: Node, level = 0) => {
+      if (node.left) traverse(node.left, level + 1)
+      if (node.right) traverse(node.right, level + 1)
+      visited.push(`\n${" ".repeat(level * 2)}${node.value}`)
+    }
+    traverse(this.root as Node)
+    return visited.join("\n")
+  }
+  dfsInOrder() {
+    const visited: Array<string> = []
+    const traverse = (node: Node, level = 0) => {
+      if (node.left) traverse(node.left, level + 1)
+      visited.push(`\n${" ".repeat(level * 2)}${node.value}`)
+      if (node.right) traverse(node.right, level + 1)
+    }
+    traverse(this.root as Node)
+    return visited.join("\n")
   }
 }
 
@@ -50,6 +101,4 @@ b.insert(100)
 b.insert(10)
 b.insert(20)
 b.insert(50)
-// console.log(b)
-console.log(b.search(50))
-console.log(b.searchRec(b.root, 20))
+console.log(b.dfsPreOrder())
