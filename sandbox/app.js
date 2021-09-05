@@ -18,19 +18,28 @@ const data = [
   {id: 13, name: "mercedes", parentId: 10},
 ]
 
-// const makeTree = (data, parentId = null) => {
-//   return data
-//     .filter(item => item.parentId === parentId)
-//     .reduce((list, node) => [...list, {...node, children: makeTree(data, node.id)}], [])
-// }
+const makeTreeReduce = (data, parentId = null) => {
+  return data
+    .filter(item => item.parentId === parentId)
+    .reduce((list, node) => [...list, {...node, children: makeTreeReduce(data, node.id)}], [])
+}
 
-// const traverse = tree => {
-//   if (tree.children.length === 0) return
-//   return tree.children.forEach(child => {
-//     console.log(child)
-//     traverse(tree)
-//   })
-// }
+const makeTreeForOfLoop = (data, parentId) => {
+  const items = data.filter(item => item.parentId === parentId)
+  const xs = []
+  for (const x of items) {
+    xs.push({...x, children: makeTreeForOfLoop(data, x.id)})
+  }
+  return xs
+}
+
+const traverse = tree => {
+  if (tree.children.length === 0) return
+  return tree.children.forEach(child => {
+    console.log(child)
+    traverse(tree)
+  })
+}
 
 // const tree = makeTree(data)
 // console.log(traverse(tree[0]))
