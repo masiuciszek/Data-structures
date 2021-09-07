@@ -14,91 +14,92 @@ class Bst {
   constructor() {
     this.root = null
   }
-
-  insert(key: number) {
-    this.root = this.insertRec(this.root, key)
+  insert(value: number) {
+    this.root = this.insertNode(this.root, value)
   }
-  insertRec(root: Node | null, value: number): Node {
+
+  insertNode(root: Node | null, value: number) {
     if (root === null) {
       root = new Node(value)
       return root
     }
     if (value < root.value) {
-      root.left = this.insertRec(root.left, value)
-    } else {
-      root.right = this.insertRec(root.right, value)
+      root.left = this.insertNode(root.left, value)
+    }
+    if (value > root.value) {
+      root.right = this.insertNode(root.right, value)
     }
     return root
   }
 
   search(key: number) {
-    let current = this.root
-    let found = false
-    while (current && !found) {
-      if (key === current.value) {
-        found = true
-        return current
-      }
-      if (key < current.value) {
-        current = current.left
-      } else {
-        current = current.right
-      }
-    }
-    return current
+    return this.searchHelper(this.root, key)
   }
+  searchHelper(root: Node | null, key: number): Node | null {
+    if (root == null || root.value == key) return root
+    if (root.value < key) return this.searchHelper(root.right, key)
+    return this.searchHelper(root.left, key)
+  }
+
   bfs() {
-    if (this.root === null) {
-      return
-    }
+    if (this.root === null) return null
+    const queue: Array<Node> = []
+    const visited: Array<number> = []
     let node = this.root
-    const queue: Array<Node> = [node]
-    const visited: Set<number> = new Set()
+    queue.push(node)
+
     while (queue.length > 0) {
       node = queue.shift() as Node
-      visited.add(node.value)
+      visited.push(node.value)
       if (node.left) queue.push(node.left)
       if (node.right) queue.push(node.right)
     }
     return visited
   }
 
-  dfsPreOrder() {
-    const visited: Array<string> = []
-    const traverse = (node: Node, level = 0) => {
-      visited.push(`\n${" ".repeat(level * 2)}${node.value}`)
-      if (node.left) traverse(node.left, level + 1)
-      if (node.right) traverse(node.right, level + 1)
+  getMin() {
+    let current = this.root
+    if (current === null) return current
+    while (current.left !== null) {
+      current = current?.left
     }
-    traverse(this.root as Node)
-    return visited.join("\n")
+    return current.value
+  }
+  getMax() {
+    let current = this.root
+    if (current === null) return current
+    while (current.right !== null) {
+      current = current?.right
+    }
+    return current.value
   }
 
-  dfsPostOrder() {
-    const visited: Array<string> = []
-    const traverse = (node: Node, level = 0) => {
-      if (node.left) traverse(node.left, level + 1)
-      if (node.right) traverse(node.right, level + 1)
-      visited.push(`\n${" ".repeat(level * 2)}${node.value}`)
+  dfsPreOrder() {
+    if (this.root === null) return this.root
+    const nodes: Array<number> = []
+    const traversePreOrder = (node: Node) => {
+      if (node === null) {
+        return node
+      }
+      nodes.push(node.value)
+      traversePreOrder(node.left!)
+      traversePreOrder(node.right!)
     }
-    traverse(this.root as Node)
-    return visited.join("\n")
+    traversePreOrder(this.root)
+    return nodes
   }
-  dfsInOrder() {
-    const visited: Array<string> = []
-    const traverse = (node: Node, level = 0) => {
-      if (node.left) traverse(node.left, level + 1)
-      visited.push(`\n${" ".repeat(level * 2)}${node.value}`)
-      if (node.right) traverse(node.right, level + 1)
-    }
-    traverse(this.root as Node)
-    return visited.join("\n")
-  }
+
+  dfsPostOrder() {}
+  dfsInOrder() {}
 }
 
 const b = new Bst()
 b.insert(100)
-b.insert(10)
-b.insert(20)
 b.insert(50)
+b.insert(120)
+b.insert(30)
+b.insert(20)
+b.insert(110)
+console.log(b.bfs())
+console.log(b.getMax())
 console.log(b.dfsPreOrder())

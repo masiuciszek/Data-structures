@@ -1,22 +1,22 @@
-export class BstNode<T> {
-  value: T
-  left: null | BstNode<T>
-  right: null | BstNode<T>
-  constructor(value: T) {
+export class Node {
+  value: number
+  left: null | Node
+  right: null | Node
+  constructor(value: number) {
     this.value = value
     this.left = null
     this.right = null
   }
 }
 
-export class Bst<T> {
-  root: null | BstNode<T>
+export class Bst {
+  root: null | Node
   constructor() {
     this.root = null
   }
 
-  insertNode(value: T): Bst<T> {
-    const node = new BstNode(value)
+  insertNode(value: number): Bst {
+    const node = new Node(value)
     if (!this.root) {
       this.root = node
       return this
@@ -45,12 +45,20 @@ export class Bst<T> {
       }
     }
   }
+  search(key: number) {
+    return this.searchHelper(this.root, key)
+  }
+  searchHelper(root: Node | null, key: number): Node | null {
+    if (root == null || root.value == key) return root
+    if (root.value < key) return this.searchHelper(root.right, key)
+    return this.searchHelper(root.left, key)
+  }
 
   // similar to binary search
-  contains(value: T): boolean {
+  contains(value: number): boolean {
     if (!this.root) return false
     if (this.root.value === value) return true
-    let current: BstNode<T> = this.root
+    let current: Node = this.root
     while (current) {
       if (value < current.value) {
         current = current.left!
@@ -65,7 +73,3 @@ export class Bst<T> {
 }
 
 const bst = new Bst()
-
-bst.insertNode(2)
-bst.insertNode(1)
-bst.insertNode(3)
