@@ -151,17 +151,3 @@ func dfsOutOrderRec(root *node) {
 	dfsOutOrderRec(root.left)
 	dfsOutOrderRec(root.right)
 }
-
-func main() {
-	tree := newTree()
-	tree.insert(100)
-	tree.insert(150)
-	tree.insert(50)
-	tree.insert(25)
-	tree.insert(225)
-	tree.insertRec(43)
-	tree.insertRec(23)
-
-	tree.dfsOutOrder()
-
-}
