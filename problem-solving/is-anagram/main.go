@@ -1,14 +1,8 @@
 package main
 
-import (
-	"fmt"
-)
-
 func isAnagram(s1, s2 string) bool {
 	chars := make(map[rune]int)
-
 	for _, c := range s1 {
-
 		_, ok := chars[c]
 		if ok {
 			chars[c]++
@@ -30,11 +24,4 @@ func isAnagram(s1, s2 string) bool {
 		}
 	}
 	return true
-}
-
-func main() {
-
-	fmt.Println(isAnagram("apa", "apa"))
-	fmt.Println(isAnagram("apa", "apaa"))
-
 }
