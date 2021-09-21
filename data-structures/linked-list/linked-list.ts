@@ -16,6 +16,7 @@ interface LinkedList {
   isEmpty(): boolean
   get(index: number): Node | boolean
   getSize(): number
+  reverse(node: Node): Node
 }
 function createNode(data: number): Node {
   return {
@@ -140,6 +141,13 @@ function LinkedList(): LinkedList {
       }
       this.size--
       return true
+    },
+    reverse(node: Node) {
+      if (node === null || node.next === null) return node
+      const p = this.reverse(node.next)
+      node.next.next = node
+      node.next = null
+      return p
     },
   }
 }
