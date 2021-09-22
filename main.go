@@ -1,28 +1,23 @@
 package main
 
-import (
-	"errors"
-	"fmt"
-)
+import "fmt"
 
-func distance(a, b string) (int, error) {
-	var err error = nil
-	result := 0
+func grains(n uint64) uint64 {
+	var value uint64 = 1
 
-	if len(a) == len(b) {
-		for i := 0; i < len(a); i++ {
-			if a[i] != b[i] {
-				result++
-			}
-		}
-	} else {
-		err = errors.New("unable to calculate distance for inputs of different lengths")
+	var i uint64 = 1
+	for i < n {
+		fmt.Println(i)
+		value = value * 2
+		i++
 	}
 
-	return result, err
-
+	return value
 }
-
 func main() {
-	fmt.Println(distance("GGACGGATTCTG", "AGGACGGATTCT"))
+
+	grains(4)
+	grains(5)
+	grains(6)
+
 }
