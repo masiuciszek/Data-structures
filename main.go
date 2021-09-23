@@ -1,23 +1,49 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"strconv"
+)
 
-func grains(n uint64) uint64 {
-	var value uint64 = 1
+type Clock struct {
+	hour   int
+	minute int
+}
 
-	var i uint64 = 1
-	for i < n {
-		fmt.Println(i)
-		value = value * 2
-		i++
+const minutesPerHour = 60
+
+func New(hour, minute int) Clock {
+	return Clock{hour, minute}.Normalize()
+}
+func (c Clock) Normalize() Clock {
+	var hh string
+	var mm string
+	if c.hour < 10 {
+		hh = "0" + strconv.Itoa(c.hour)
+	} else {
+		hh = strconv.Itoa(c.hour)
+	}
+	if c.minute < 10 {
+		mm = "0" + strconv.Itoa(c.minute)
+	} else {
+		mm = strconv.Itoa(c.minute)
 	}
 
-	return value
-}
-func main() {
+	hourInt, err := strconv.Atoi(hh)
+	if err != nil {
+		errors.New("noooo")
+	}
 
-	grains(4)
-	grains(5)
-	grains(6)
+	minInt, err := strconv.Atoi(mm)
+	if err != nil {
+		errors.New("noooo")
+	}
+
+	return Clock{hour: hourInt, minute: minInt}
+}
+
+func main() {
+	r := New(60, 60)
+	r.Normalize()
 
 }
