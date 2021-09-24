@@ -1,3 +1,3 @@
-module github.com/masiucd/data-structures-and-algorithms
+module ds
 
 go 1.15
