@@ -1,10 +1,3 @@
-const xs = [1, 2, 3, 4]
-// [24,12,8,6]
-
-// we could loop over the whole list first hand multiple the product
-
-// then we could loop again to divide by each number and but that result in our result list
-
 function productExceptSelf(nums: number[]): number[] {
   const result: number[] = []
   const left: number[] = []
@@ -27,5 +20,5 @@ function productExceptSelf(nums: number[]): number[] {
   return result
 }
 
-console.log(productExceptSelf(xs))
+console.log(productExceptSelf([1, 2, 3, 4]))
 console.log(productExceptSelf([-1, 1, 0, -3, 3]))

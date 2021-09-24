@@ -1,49 +1,53 @@
 package main
 
-import (
-	"errors"
-	"strconv"
-)
+import "fmt"
 
-type Clock struct {
-	hour   int
-	minute int
-}
+func productExceptSelf(nums []int) []int {
+	var result = make([]int, len(nums))
 
-const minutesPerHour = 60
+	left := make([]int, len(nums))
+	right := make([]int, len(nums))
+	left[0] = 1
+	right[len(nums)-1] = 1
 
-func New(hour, minute int) Clock {
-	return Clock{hour, minute}.Normalize()
-}
-func (c Clock) Normalize() Clock {
-	var hh string
-	var mm string
-	if c.hour < 10 {
-		hh = "0" + strconv.Itoa(c.hour)
-	} else {
-		hh = strconv.Itoa(c.hour)
-	}
-	if c.minute < 10 {
-		mm = "0" + strconv.Itoa(c.minute)
-	} else {
-		mm = strconv.Itoa(c.minute)
+	for i := 1; i < len(nums); i++ {
+		left[i] = nums[i-1] * left[i-1]
 	}
 
-	hourInt, err := strconv.Atoi(hh)
-	if err != nil {
-		errors.New("noooo")
+	for i := len(nums) - 2; i >= 0; i-- {
+		right[i] = nums[i+1] * right[i+1]
 	}
 
-	minInt, err := strconv.Atoi(mm)
-	if err != nil {
-		errors.New("noooo")
+	for i := 0; i < len(nums); i++ {
+		fmt.Println(i)
+		result[i] = left[i] * right[i]
 	}
 
-	return Clock{hour: hourInt, minute: minInt}
+	return result
 }
 
 func main() {
-	r := New(60, 60)
-	r.Normalize()
+
+	fmt.Println(productExceptSelf([]int{1, 2, 3, 4}))
 
 }
+
+// const result: number[] = []
+// const left: number[] = []
+// const right: number[] = []
+// const SIZE = nums.length
+
+// left[0] = 1
+// right[SIZE - 1] = 1
+
+// for (let i = 1; i < SIZE; i++) {
+// 	left[i] = nums[i - 1] * left[i - 1]
+// }
+// for (let i = SIZE - 2; i >= 0; i--) {
+// 	right[i] = nums[i + 1] * right[i + 1]
+// }
+
+// for (let i = 0; i < SIZE; i++) {
+// 	result[i] = left[i] * right[i]
+// }
+// return result

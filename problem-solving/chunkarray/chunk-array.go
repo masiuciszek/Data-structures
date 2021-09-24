@@ -19,7 +19,6 @@ func ChunkList2(list []int, level int) [][]int {
 	for i := 0; i < len(list); i += level {
 		result = append(result, list[i:level+i])
 	}
-
 	return result
 
 }
